@@ -27,10 +27,10 @@ export default function TeacherModal({ isOpen, onClose, onSuccess, teacher }: Te
     if (isOpen) {
       if (teacher) {
         setFormData({
-          name: teacher.name,
+          name: teacher.full_name_en || teacher.full_name_kh || '',
           email: teacher.email,
           phone: teacher.phone,
-          subject: teacher.subject,
+          subject: teacher.subjects?.join(', ') || '',
           bio: teacher.bio || ''
         });
       } else {

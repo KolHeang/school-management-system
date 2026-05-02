@@ -4,9 +4,16 @@ export interface Teacher {
   full_name_kh: string;
   email: string;
   phone: string;
-  subjects: string[];
+  subjects?: Subject[];
   bio?: string;
   photo?: string;
+}
+export interface Subject {
+  id: number;
+  code: string;
+  name_en: string;
+  name_kh: string;
+  description?: string;
 }
 
 export interface Classroom {
@@ -55,6 +62,7 @@ export interface Student {
   district?: District;
   commune?: Commune;
   village?: Village;
+  photo?: string;
 }
 
 export interface Permission {

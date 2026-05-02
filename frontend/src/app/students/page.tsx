@@ -17,6 +17,30 @@ export default function StudentsPage() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const columns = [
+    {
+      key: 'photo',
+      label: t('photo'),
+      render: (_: any, student: Student) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {student.photo ? (
+            <img 
+              src={student.photo} 
+              alt="photo" 
+              style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover', border: '2px solid #e2e8f0' }} 
+            />
+          ) : (
+            <div style={{ 
+              width: 36, height: 36, borderRadius: 10, 
+              background: 'linear-gradient(135deg,#6366f1,#818cf8)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'white', fontWeight: 800, fontSize: 14
+            }}>
+              {(student.full_name_en ?? '?')[0]?.toUpperCase()}
+            </div>
+          )}
+        </div>
+      )
+    },
     { key: 'student_code', label: t('studentCode') },
     { key: 'full_name_en', label: t('fullNameEn') },
     { key: 'full_name_kh', label: t('fullNameKh') },

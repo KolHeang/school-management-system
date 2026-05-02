@@ -16,8 +16,7 @@ export class CreateTeacherDto {
   phone: string;
 
   @IsArray()
-  @IsString({ each: true })
-  subjects: string[];
+  subjectIds?: number[];
 
   @IsString()
   @IsOptional()

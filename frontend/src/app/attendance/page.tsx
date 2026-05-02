@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { Search, CheckCircle, XCircle, Clock, AlertCircle, Save } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import styles from './attendance.module.css';
 import { Classroom, Student, AttendanceStatus } from '@/types';
 
 export default function AttendancePage() {
+  const router = useRouter();
   const { t } = useLanguage();
   const [classes, setClasses] = useState<Classroom[]>([]);
   const [selectedClass, setSelectedClass] = useState<string>('');
@@ -130,14 +132,23 @@ export default function AttendancePage() {
           <h1 className={styles.title}>{t('attendance')}</h1>
           <p className={styles.subtitle}>{t('attendanceSubtitle')}</p>
         </div>
-        <button 
-          className={styles.saveBtn} 
-          onClick={saveAttendance}
-          disabled={isSaving || students.length === 0}
-        >
-          <Save size={20} />
-          <span>{isSaving ? t('loading') : t('saveAttendance')}</span>
-        </button>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <button 
+            className={styles.addBtn} 
+            onClick={() => router.push('/attendance/report')}
+            style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)', border: '1px solid var(--border)' }}
+          >
+            <span>{t('viewReport')}</span>
+          </button>
+          <button 
+            className={styles.saveBtn} 
+            onClick={saveAttendance}
+            disabled={isSaving || students.length === 0}
+          >
+            <Save size={20} />
+            <span>{isSaving ? t('loading') : t('saveAttendance')}</span>
+          </button>
+        </div>
       </header>
 
       <div className={styles.filterBar}>

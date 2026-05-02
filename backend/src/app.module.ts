@@ -15,6 +15,8 @@ import { AuthModule } from './auth/auth.module';
 import { AttendanceModule } from './attendance/attendance.module';
 import { SeedModule } from './seed/seed.module';
 import { AddressModule } from './address/address.module';
+import { SubjectsModule } from './subjects/subjects.module';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -37,6 +39,8 @@ import { AddressModule } from './address/address.module';
     AttendanceModule,
     SeedModule,
     AddressModule,
+    SubjectsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

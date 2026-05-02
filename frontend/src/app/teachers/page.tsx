@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 import DataTable from '@/components/DataTable';
 import styles from '../students/page.module.css';
-import { Teacher } from '@/types';
+import { Teacher, Subject } from '@/types';
 
 export default function TeachersPage() {
   const router = useRouter();
@@ -48,14 +48,14 @@ export default function TeachersPage() {
     {
       key: 'subjects',
       label: t('subjects'),
-      render: (subjects: string[]) => (
+      render: (subjects: Subject[]) => (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
           {(subjects ?? []).map((s, i) => (
             <span key={i} style={{
               background: '#eef2ff', color: '#4f46e5',
               padding: '2px 10px', borderRadius: 20,
               fontSize: 12, fontWeight: 700
-            }}>{s}</span>
+            }}>{s.name_en}</span>
           ))}
         </div>
       )
@@ -95,7 +95,7 @@ export default function TeachersPage() {
   const filtered = Array.isArray(teachers) ? teachers.filter(tc =>
     (tc.full_name_en ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (tc.full_name_kh ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (tc.subjects ?? []).some(s => s.toLowerCase().includes(searchTerm.toLowerCase()))
+    (tc.subjects ?? []).some((s: any) => s.name_en.toLowerCase().includes(searchTerm.toLowerCase()))
   ) : [];
 
   return (

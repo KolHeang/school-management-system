@@ -22,7 +22,7 @@ export default function ClassesPage() {
     {
       key: 'teacher',
       label: t('teachers'),
-      render: (teacher: any) => teacher ? teacher.name : t('noTeacher')
+      render: (teacher: any) => teacher ? (teacher.full_name_en || teacher.full_name_kh) : t('noTeacher')
     },
     {
       key: 'students',

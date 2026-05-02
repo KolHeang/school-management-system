@@ -53,6 +53,10 @@
   min-height: 300px;
 }
 
+.calendarWrapper {
+  margin-top: 16px;
+}
+
 .placeholder {
   display: flex;
   align-items: center;

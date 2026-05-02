@@ -31,4 +31,13 @@ export class AttendanceController {
   update(@Param('id') id: string, @Body() updateAttendanceDto: UpdateAttendanceDto) {
     return this.attendanceService.update(+id, updateAttendanceDto);
   }
+
+  @Get('report')
+  getReport(
+    @Query('classroomId') classroomId: string,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string
+  ) {
+    return this.attendanceService.getReport(+classroomId, startDate, endDate);
+  }
 }

@@ -66,10 +66,10 @@ export default function TeacherDetailPage() {
             <div className={styles.profileName}>{teacher.full_name_en ?? '-'}</div>
             <div className={styles.profileNameKh}>{teacher.full_name_kh ?? ''}</div>
             <div className={styles.badgeRow}>
-              {(teacher.subjects ?? []).map((s: string, i: number) => (
+              {(teacher.subjects ?? []).map((s: any, i: number) => (
                 <span key={i} className={`${styles.badge} ${styles.badgeClass}`}>
                   <BookOpen size={11} />
-                  {s}
+                  {s.name_en}
                 </span>
               ))}
             </div>
@@ -110,12 +110,12 @@ export default function TeacherDetailPage() {
           <div className={styles.sectionTitle}>{t('subjects')}</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
             {(teacher.subjects ?? []).length > 0
-              ? teacher.subjects.map((s: string, i: number) => (
+              ? teacher.subjects.map((s: any, i: number) => (
                 <span key={i} style={{
                   background: '#f0f9ff', color: '#0ea5e9',
                   padding: '4px 14px', borderRadius: 20,
                   fontSize: 13, fontWeight: 700
-                }}>{s}</span>
+                }}>{s.name_en}</span>
               ))
               : <span className={styles.fieldEmpty}>—</span>}
           </div>

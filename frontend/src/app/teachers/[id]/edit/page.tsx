@@ -6,6 +6,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { ChevronLeft, Save, Upload, User, Plus, X } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 import styles from '../../../students/create/create.module.css';
+import { Subject } from '@/types';
 
 export default function EditTeacherPage() {
   const router = useRouter();
@@ -16,16 +17,29 @@ export default function EditTeacherPage() {
     full_name_kh: '',
     email: '',
     phone: '',
-    subjects: [] as string[],
+    subjectIds: [] as number[],
     bio: '',
     photo: '',
   });
-  const [subjectInput, setSubjectInput] = useState('');
+  const [availableSubjects, setAvailableSubjects] = useState<Subject[]>([]);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  useEffect(() => { if (id) fetchTeacher(); }, [id]);
+  useEffect(() => {
+    if (id) {
+      fetchSubjects().then(() => fetchTeacher());
+    }
+  }, [id]);
+
+  const fetchSubjects = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/subjects');
+      setAvailableSubjects(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error('Error fetching subjects:', error);
+    }
+  };
 
   const fetchTeacher = async () => {
     try {
@@ -36,7 +50,7 @@ export default function EditTeacherPage() {
         full_name_kh: data.full_name_kh ?? '',
         email: data.email ?? '',
         phone: data.phone ?? '',
-        subjects: Array.isArray(data.subjects) ? data.subjects : [],
+        subjectIds: Array.isArray(data.subjects) ? data.subjects.map((s: any) => s.id) : [],
         bio: data.bio ?? '',
         photo: data.photo ?? '',
       });
@@ -49,16 +63,16 @@ export default function EditTeacherPage() {
     }
   };
 
-  const addSubject = () => {
-    const trimmed = subjectInput.trim();
-    if (trimmed && !formData.subjects.includes(trimmed)) {
-      setFormData({ ...formData, subjects: [...formData.subjects, trimmed] });
+  const addSubject = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = parseInt(e.target.value);
+    if (!isNaN(val) && !formData.subjectIds.includes(val)) {
+      setFormData({ ...formData, subjectIds: [...formData.subjectIds, val] });
     }
-    setSubjectInput('');
+    e.target.value = ''; // Reset select
   };
 
-  const removeSubject = (subject: string) => {
-    setFormData({ ...formData, subjects: formData.subjects.filter(s => s !== subject) });
+  const removeSubject = (subjectId: number) => {
+    setFormData({ ...formData, subjectIds: formData.subjectIds.filter(idx => idx !== subjectId) });
   };
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,43 +179,32 @@ export default function EditTeacherPage() {
                   </div>
                 </div>
 
-                {/* Subjects multi-input */}
+                {/* Subjects multi-select */}
                 <div className={styles.inputGroup}>
                   <label>{t('subjects')}</label>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <input
-                      type="text"
-                      placeholder={t('addSubject')}
-                      value={subjectInput}
-                      onChange={(e) => setSubjectInput(e.target.value)}
-                      onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addSubject(); } }}
-                      style={{ flex: 1 }}
-                    />
-                    <button
-                      type="button"
-                      onClick={addSubject}
-                      style={{
-                        padding: '10px 16px', background: 'var(--primary)', color: 'white',
-                        borderRadius: 12, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4
-                      }}
-                    >
-                      <Plus size={16} />
-                    </button>
-                  </div>
-                  {formData.subjects.length > 0 && (
+                  <select onChange={addSubject} defaultValue="">
+                    <option value="" disabled>{t('addSubject')}</option>
+                    {availableSubjects.map(sub => (
+                      <option key={sub.id} value={sub.id}>{sub.name_en} ({sub.name_kh})</option>
+                    ))}
+                  </select>
+                  {formData.subjectIds.length > 0 && (
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
-                      {formData.subjects.map((s, i) => (
-                        <span key={i} style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 6,
-                          background: '#eef2ff', color: '#4f46e5',
-                          padding: '4px 12px', borderRadius: 20, fontSize: 13, fontWeight: 700
-                        }}>
-                          {s}
-                          <button type="button" onClick={() => removeSubject(s)} style={{ color: '#6366f1', lineHeight: 1 }}>
-                            <X size={12} />
-                          </button>
-                        </span>
-                      ))}
+                      {formData.subjectIds.map(id => {
+                        const sub = availableSubjects.find(s => s.id === id);
+                        return sub ? (
+                          <span key={id} style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            background: '#eef2ff', color: '#4f46e5',
+                            padding: '4px 12px', borderRadius: 20, fontSize: 13, fontWeight: 700
+                          }}>
+                            {sub.name_en}
+                            <button type="button" onClick={() => removeSubject(id)} style={{ color: '#6366f1', lineHeight: 1 }}>
+                              <X size={12} />
+                            </button>
+                          </span>
+                        ) : null;
+                      })}
                     </div>
                   )}
                 </div>

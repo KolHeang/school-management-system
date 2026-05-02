@@ -119,7 +119,9 @@ export default function EditClassPage() {
               >
                 <option value="">Select a teacher...</option>
                 {Array.isArray(teachers) && teachers.map(t => (
-                  <option key={t.id} value={t.id}>{t.name} ({t.subject})</option>
+                  <option key={t.id} value={t.id}>
+                    {t.full_name_en || t.full_name_kh} {t.subjects && t.subjects.length > 0 ? `(${t.subjects.map(s => s.name_en).join(', ')})` : ''}
+                  </option>
                 ))}
               </select>
             </div>

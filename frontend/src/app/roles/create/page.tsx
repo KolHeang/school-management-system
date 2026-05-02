@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Save } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 import styles from '../../students/create/create.module.css';
 import { Permission } from '@/types';
 
 export default function CreateRolePage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [permissions, setPermissions] = useState<Permission[]>([]);
   const [formData, setFormData] = useState({
     name: '',
@@ -51,7 +53,7 @@ export default function CreateRolePage() {
       router.push('/roles');
     } catch (error) {
       console.error('Error creating role:', error);
-      alert('Failed to create role.');
+      alert(t('saveError'));
     } finally {
       setIsLoading(false);
     }
@@ -62,28 +64,28 @@ export default function CreateRolePage() {
       <header className={styles.header}>
         <button onClick={() => router.back()} className={styles.backBtn}>
           <ChevronLeft size={20} />
-          <span>Back to List</span>
+          <span>{t('back')}</span>
         </button>
-        <h1 className={styles.title}>Add New Role</h1>
+        <h1 className={styles.title}>{t('addRole')}</h1>
       </header>
 
       <div className={styles.card}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.section}>
-            <h3>Role Details</h3>
+            <h3>{t('roleDetails')}</h3>
             <div className={styles.inputGroup}>
-              <label>Role Name</label>
+              <label>{t('roleName')}</label>
               <input 
                 type="text" 
                 required 
-                placeholder="e.g. Moderator"
+                placeholder={t('roleNamePlaceholder')}
                 value={formData.name}
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
             </div>
 
             <div className={styles.inputGroup} style={{ marginTop: '24px' }}>
-              <label>Assign Permissions</label>
+              <label>{t('assignPermissions')}</label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
                 {Array.isArray(permissions) && permissions.map(p => (
                   <label key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', border: '1px solid var(--border)', borderRadius: '12px', cursor: 'pointer', background: formData.permissionIds.includes(p.id) ? '#f0f4ff' : '#f8fafc' }}>
@@ -104,11 +106,11 @@ export default function CreateRolePage() {
 
           <div className={styles.actions}>
             <button type="button" onClick={() => router.back()} className={styles.cancelBtn}>
-              Cancel
+              {t('cancel')}
             </button>
             <button type="submit" className={styles.saveBtn} disabled={isLoading}>
               <Save size={20} />
-              <span>{isLoading ? 'Creating...' : 'Create Role'}</span>
+              <span>{isLoading ? t('creating') : t('createRole')}</span>
             </button>
           </div>
         </form>

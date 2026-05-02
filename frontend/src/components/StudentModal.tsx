@@ -39,7 +39,7 @@ export default function StudentModal({ isOpen, onClose, onSuccess, student }: St
       fetchProvinces();
       if (student) {
         setFormData({
-          name: student.name,
+          name: student.full_name_en || student.full_name_kh || '',
           email: student.email,
           phone: student.phone,
           gender: student.gender,

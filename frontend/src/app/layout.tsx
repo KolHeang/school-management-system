@@ -4,7 +4,7 @@ import ClientLayout from "@/components/ClientLayout";
 import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
-const battambang = Battambang({ 
+const battambang = Battambang({
   weight: ['400', '700'],
   subsets: ['khmer'],
   variable: '--font-battambang'
@@ -13,8 +13,8 @@ const battambang = Battambang({
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: "SMS Academy | Student Management System",
-  description: "Premium management system for modern educational institutions",
+  title: "ប្រព័ន្ធគ្រប់គ្រងសិស្ស",
+  description: "ប្រព័ន្ធគ្រប់គ្រងកម្រិតខ្ពស់សម្រាប់ស្ថាប័នអប់រំទំនើប",
 };
 
 export default function RootLayout({

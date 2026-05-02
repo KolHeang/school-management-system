@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { ChevronLeft, Save } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 import styles from '../../students/create/create.module.css';
 import { Role } from '@/types';
 
 export default function CreateUserPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [roles, setRoles] = useState<Role[]>([]);
   const [formData, setFormData] = useState({
     username: '',
@@ -48,7 +50,7 @@ export default function CreateUserPage() {
       router.push('/users');
     } catch (error) {
       console.error('Error creating user:', error);
-      alert('Failed to create user.');
+      alert(t('saveError'));
     } finally {
       setIsLoading(false);
     }
@@ -59,44 +61,44 @@ export default function CreateUserPage() {
       <header className={styles.header}>
         <button onClick={() => router.back()} className={styles.backBtn}>
           <ChevronLeft size={20} />
-          <span>Back to List</span>
+          <span>{t('back')}</span>
         </button>
-        <h1 className={styles.title}>Add New User</h1>
+        <h1 className={styles.title}>{t('addUser')}</h1>
       </header>
 
       <div className={styles.card}>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.section}>
-            <h3>Account Information</h3>
+            <h3>{t('accountInfo')}</h3>
             <div className={styles.inputGroup}>
-              <label>Username</label>
+              <label>{t('username')}</label>
               <input 
                 type="text" 
                 required 
-                placeholder="Enter username"
+                placeholder={t('enterUsername')}
                 value={formData.username}
                 onChange={(e) => setFormData({...formData, username: e.target.value})}
               />
             </div>
 
             <div className={styles.inputGroup}>
-              <label>Password</label>
+              <label>{t('password')}</label>
               <input 
                 type="password" 
                 required 
-                placeholder="Enter password"
+                placeholder={t('enterPassword')}
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
               />
             </div>
 
             <div className={styles.inputGroup}>
-              <label>Assign Role</label>
+              <label>{t('assignRole')}</label>
               <select 
                 value={formData.roleId}
                 onChange={(e) => setFormData({...formData, roleId: e.target.value})}
               >
-                <option value="">Select a role...</option>
+                <option value="">{t('selectRole')}</option>
                 {Array.isArray(roles) && roles.map(r => (
                   <option key={r.id} value={r.id}>{r.name}</option>
                 ))}
@@ -106,11 +108,11 @@ export default function CreateUserPage() {
 
           <div className={styles.actions}>
             <button type="button" onClick={() => router.back()} className={styles.cancelBtn}>
-              Cancel
+              {t('cancel')}
             </button>
             <button type="submit" className={styles.saveBtn} disabled={isLoading}>
               <Save size={20} />
-              <span>{isLoading ? 'Creating...' : 'Create User'}</span>
+              <span>{isLoading ? t('creating') : t('createUser')}</span>
             </button>
           </div>
         </form>
