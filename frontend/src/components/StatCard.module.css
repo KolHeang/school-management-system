@@ -1,0 +1,29 @@
+.card {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.iconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+}

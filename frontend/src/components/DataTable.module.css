@@ -1,0 +1,91 @@
+.container {
+  overflow-x: auto;
+  border-radius: 16px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  padding: 16px 24px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.table td {
+  padding: 16px 24px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background-color: rgba(99, 102, 241, 0.03);
+}
+
+.actionsHeader {
+  text-align: right;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.viewBtn, .editBtn, .deleteBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.viewBtn {
+  color: #0ea5e9;
+  background: #f0f9ff;
+}
+
+.viewBtn:hover {
+  background: #0ea5e9;
+  color: white;
+}
+
+.editBtn {
+  color: var(--primary);
+  background: #eff6ff;
+}
+
+.editBtn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.deleteBtn {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.deleteBtn:hover {
+  background: #ef4444;
+  color: white;
+}
+
+.loading, .empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-muted);
+}
