@@ -25,8 +25,10 @@ export class StudentsService {
     return await this.studentsRepository.save(student);
   }
 
-  async findAll() {
+  async findAll(classroomId?: number) {
+    const where = classroomId ? { classroom: { id: classroomId } } : {};
     return await this.studentsRepository.find({
+      where,
       relations: ['classroom', 'province', 'district', 'commune', 'village'],
     });
   }

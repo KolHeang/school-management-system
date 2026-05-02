@@ -37,20 +37,24 @@ export default function AttendancePage() {
   }, []);
 
   const fetchAttendance = async () => {
-    if (!selectedClass) return;
-    
     setIsLoading(true);
     try {
-      // First get all students in the class
-      const classRes = await axios.get(`http://localhost:3001/classrooms/${selectedClass}`);
-      const studentsInClass = classRes.data.students || [];
+      // Fetch students (either all or filtered by class)
+      const studentsUrl = selectedClass 
+        ? `http://localhost:3001/students?classroomId=${selectedClass}`
+        : 'http://localhost:3001/students';
+      const studentsRes = await axios.get(studentsUrl);
+      const studentsList = studentsRes.data || [];
 
-      // Then get existing attendance for this date
-      const attendRes = await axios.get(`http://localhost:3001/attendance/filter?classroomId=${selectedClass}&date=${selectedDate}`);
-      const existingAttendance = attendRes.data;
+      // Fetch existing attendance records for the date (optionally filtered by class)
+      const attendanceUrl = selectedClass
+        ? `http://localhost:3001/attendance/filter?classroomId=${selectedClass}&date=${selectedDate}`
+        : `http://localhost:3001/attendance/filter?date=${selectedDate}`;
+      const attendRes = await axios.get(attendanceUrl);
+      const existingAttendance = attendRes.data || [];
 
       // Merge them
-      const merged = studentsInClass.map((student: Student) => {
+      const merged = studentsList.map((student: Student) => {
         const record = existingAttendance.find((a: any) => a.student.id === student.id);
         return {
           ...student,
@@ -71,7 +75,7 @@ export default function AttendancePage() {
   };
 
   useEffect(() => {
-    if (selectedClass && selectedDate) {
+    if (selectedDate) {
       fetchAttendance();
     }
   }, [selectedClass, selectedDate]);
@@ -179,13 +183,28 @@ export default function AttendancePage() {
 
       {isLoading ? (
         <div className={styles.loader}>{t('loading')}</div>
-      ) : selectedClass ? (
+      ) : (
         <div className={styles.studentList}>
+          {!selectedClass && (
+            <div style={{ 
+              padding: '12px 20px', 
+              background: '#f8fafc', 
+              borderBottom: '1px solid #e2e8f0', 
+              color: '#64748b', 
+              fontSize: '13px',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <AlertCircle size={16} />
+              {t('showingAllStudents')}
+            </div>
+          )}
           {students.length > 0 ? (
             <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>{t('studentCode')}</th>
                   <th>{t('fullName')}</th>
                   <th>{t('morning')}</th>
                   <th>{t('afternoon')}</th>
@@ -198,10 +217,14 @@ export default function AttendancePage() {
                     <td>
                       <div className={styles.studentInfo}>
                         <div className={styles.avatar} style={{ backgroundColor: '#94a3b8' }}>
-                          {student.full_name_en?.[0] ?? '?'}
+                          {student.photo ? (
+                            <img src={student.photo} alt={student.full_name_en} className={styles.avatarImg} />
+                          ) : (
+                            student.full_name_en?.[0] ?? '?'
+                          )}
                         </div>
                         <div>
-                          <div style={{ fontSize: '14px' }}>{student.full_name_en ?? '-'}</div>
+                          <div style={{ fontSize: '14px', fontWeight: 600 }}>{student.full_name_en ?? '-'}</div>
                           <div style={{ fontSize: '12px', color: '#64748b' }}>{student.full_name_kh ?? '-'}</div>
                         </div>
                       </div>
@@ -276,8 +299,6 @@ export default function AttendancePage() {
             <div className={styles.emptyState}>{t('noStudentsFound')}</div>
           )}
         </div>
-      ) : (
-        <div className={styles.emptyState}>{t('selectClassToView')}</div>
       )}
     </div>
   );

@@ -18,8 +18,11 @@ export class AttendanceController {
   }
 
   @Get('filter')
-  filter(@Query('classroomId') classroomId: string, @Query('date') date: string) {
-    return this.attendanceService.findByClassAndDate(+classroomId, date);
+  filter(@Query('classroomId') classroomId: string | undefined, @Query('date') date: string) {
+    return this.attendanceService.findByClassAndDate(
+      classroomId ? +classroomId : undefined, 
+      date
+    );
   }
 
   @Get('class/:id/:date')

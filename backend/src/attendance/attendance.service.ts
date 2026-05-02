@@ -27,14 +27,16 @@ export class AttendanceService {
     });
   }
 
-  async findByClassAndDate(classroomId: number, date: string) {
+  async findByClassAndDate(classroomId: number | undefined, date: string) {
+    const where: any = { date };
+    if (classroomId) {
+      where.student = {
+        classroom: { id: classroomId },
+      };
+    }
+    
     return await this.attendanceRepository.find({
-      where: {
-        date,
-        student: {
-          classroom: { id: classroomId },
-        },
-      },
+      where,
       relations: ['student'],
     });
   }

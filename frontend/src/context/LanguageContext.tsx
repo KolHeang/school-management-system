@@ -172,6 +172,7 @@ export const translations: Translations = {
   month10: { en: 'October', km: 'តុលា' },
   month11: { en: 'November', km: 'វិច្ឆិកា' },
   month12: { en: 'December', km: 'ធ្នូ' },
+  showingAllStudents: { en: 'Showing all students from all classes.', km: 'កំពុងបង្ហាញសិស្សទាំងអស់មកពីគ្រប់ថ្នាក់។' },
   
 };
 
