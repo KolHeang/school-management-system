@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, GraduationCap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 import DataTable from '@/components/DataTable';
+import PromoteModal from '@/components/PromoteModal';
 import styles from './page.module.css';
 import { Student } from '@/types';
 
@@ -15,6 +16,8 @@ export default function StudentsPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [isPromoteModalOpen, setIsPromoteModalOpen] = useState(false);
 
   const columns = [
     {
@@ -111,6 +114,21 @@ export default function StudentsPage() {
     router.push('/students/create');
   };
 
+  const handlePromote = async (classroomId: number) => {
+    try {
+      await axios.patch('http://localhost:3001/promotions', {
+        studentIds: selectedIds,
+        classroomId
+      });
+      alert(t('promotionSuccess'));
+      setSelectedIds([]);
+      fetchStudents();
+    } catch (error) {
+      console.error('Error promoting students:', error);
+      alert('Failed to promote students.');
+    }
+  };
+
   const filteredStudents = Array.isArray(students) ? students.filter(s =>
     (s.student_code ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (s.full_name_en ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -142,6 +160,31 @@ export default function StudentsPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
+
+        {selectedIds.length > 0 && (
+          <button 
+            className={styles.promoteBtn} 
+            onClick={() => setIsPromoteModalOpen(true)}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: 8,
+              padding: '10px 20px',
+              borderRadius: 12,
+              backgroundColor: 'var(--primary)',
+              color: 'white',
+              fontWeight: 600,
+              fontSize: 14,
+              transition: 'all 0.2s',
+              border: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 4px 6px -1px rgba(99, 102, 241, 0.2)'
+            }}
+          >
+            <GraduationCap size={18} />
+            <span>{t('promote')} ({selectedIds.length})</span>
+          </button>
+        )}
       </div>
 
       <DataTable
@@ -151,7 +194,17 @@ export default function StudentsPage() {
         onView={handleView}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        selectable
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
         t={t}
+      />
+
+      <PromoteModal
+        isOpen={isPromoteModalOpen}
+        onClose={() => setIsPromoteModalOpen(false)}
+        onPromote={handlePromote}
+        studentCount={selectedIds.length}
       />
     </div>
   );

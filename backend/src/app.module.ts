@@ -17,6 +17,7 @@ import { SeedModule } from './seed/seed.module';
 import { AddressModule } from './address/address.module';
 import { SubjectsModule } from './subjects/subjects.module';
 import { ReportsModule } from './reports/reports.module';
+import { PromotionsModule } from './promotions/promotions.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ReportsModule } from './reports/reports.module';
       inject: [ConfigService],
     }),
     StudentsModule,
+    PromotionsModule,
     TeachersModule,
     ClassroomsModule,
     DashboardModule,

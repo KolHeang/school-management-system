@@ -16,6 +16,7 @@ const menuItems = [
   { name: 'dashboard', path: '/', icon: LayoutDashboard },
   { name: 'attendance', path: '/attendance', icon: CalendarCheck },
   { name: 'students', path: '/students', icon: Users },
+  { name: 'promotions', path: '/students/promotions', icon: GraduationCap },
   { name: 'teachers', path: '/teachers', icon: UserSquare2 },
   { name: 'classes', path: '/classes', icon: GraduationCap },
   { name: 'subjects', path: '/subjects', icon: BookOpen },

@@ -15,18 +15,61 @@ interface DataTableProps {
   onView?: (item: any) => void;
   isLoading?: boolean;
   t: (key: string) => string;
+  selectable?: boolean;
+  selectedIds?: number[];
+  onSelectionChange?: (ids: number[]) => void;
 }
 
-export default function DataTable({ columns, data, onEdit, onDelete, onView, isLoading, t }: DataTableProps) {
+export default function DataTable({ 
+  columns, 
+  data, 
+  onEdit, 
+  onDelete, 
+  onView, 
+  isLoading, 
+  t,
+  selectable = false,
+  selectedIds = [],
+  onSelectionChange
+}: DataTableProps) {
   if (isLoading) {
     return <div className={styles.loading}>Loading data...</div>;
   }
+
+  const handleSelectAll = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (onSelectionChange) {
+      if (e.target.checked) {
+        onSelectionChange(data.map(item => item.id));
+      } else {
+        onSelectionChange([]);
+      }
+    }
+  };
+
+  const handleSelectOne = (id: number) => {
+    if (onSelectionChange) {
+      if (selectedIds.includes(id)) {
+        onSelectionChange(selectedIds.filter(sid => sid !== id));
+      } else {
+        onSelectionChange([...selectedIds, id]);
+      }
+    }
+  };
 
   return (
     <div className={`glass ${styles.container}`}>
       <table className={styles.table}>
         <thead>
           <tr>
+            {selectable && (
+              <th className={styles.checkboxCol}>
+                <input 
+                  type="checkbox" 
+                  onChange={handleSelectAll}
+                  checked={data.length > 0 && selectedIds.length === data.length}
+                />
+              </th>
+            )}
             {columns.map((col) => (
               <th key={col.key}>{col.label}</th>
             ))}
@@ -36,13 +79,26 @@ export default function DataTable({ columns, data, onEdit, onDelete, onView, isL
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length + 1} className={styles.empty}>
+              <td colSpan={columns.length + (selectable ? 2 : 1)} className={styles.empty}>
                 No data available
               </td>
             </tr>
           ) : (
             data.map((item, idx) => (
-              <tr key={item.id || idx} className="animate-fade-in" style={{ animationDelay: `${idx * 0.05}s` }}>
+              <tr 
+                key={item.id || idx} 
+                className={`${styles.row} animate-fade-in ${selectedIds.includes(item.id) ? styles.selectedRow : ''}`} 
+                style={{ animationDelay: `${idx * 0.05}s` }}
+              >
+                {selectable && (
+                  <td className={styles.checkboxCol}>
+                    <input 
+                      type="checkbox" 
+                      checked={selectedIds.includes(item.id)}
+                      onChange={() => handleSelectOne(item.id)}
+                    />
+                  </td>
+                )}
                 {columns.map((col) => (
                   <td key={col.key}>
                     {col.render ? col.render(item[col.key], item) : item[col.key]}

@@ -173,7 +173,23 @@ export const translations: Translations = {
   month11: { en: 'November', km: 'វិច្ឆិកា' },
   month12: { en: 'December', km: 'ធ្នូ' },
   showingAllStudents: { en: 'Showing all students from all classes.', km: 'កំពុងបង្ហាញសិស្សទាំងអស់មកពីគ្រប់ថ្នាក់។' },
-  
+  promote: { en: 'Promote', km: 'ឡើងថ្នាក់' },
+  promoteStudents: { en: 'Promote Students', km: 'ដំឡើងថ្នាក់សិស្ស' },
+  targetClassroom: { en: 'Target Classroom', km: 'ថ្នាក់រៀនគោលដៅ' },
+  promotionSuccess: { en: 'Students promoted successfully!', km: 'បានដំឡើងថ្នាក់សិស្សដោយជោគជ័យ!' },
+  selectStudentsToPromote: { en: 'Please select students to promote.', km: 'សូមជ្រើសរើសសិស្សដើម្បីដំឡើងថ្នាក់។' },
+  confirmPromotion: { en: 'Confirm Promotion', km: 'បញ្ជាក់ការឡើងថ្នាក់' },
+  fromClass: { en: 'From Class', km: 'ពីថ្នាក់' },
+  toClass: { en: 'To Class', km: 'ទៅថ្នាក់' },
+  promotionDate: { en: 'Promotion Date', km: 'កាលបរិច្ឆេទឡើងថ្នាក់' },
+  academicYear: { en: 'Academic Year', km: 'ឆ្នាំសិក្សា' },
+  noPromotionHistory: { en: 'No promotion history found.', km: 'មិនមានប្រវត្តិនៃការឡើងថ្នាក់ទេ។' },
+  sourceClassroom: { en: 'Source Classroom', km: 'ថ្នាក់រៀនដើម' },
+  selectStudents: { en: 'Select Students', km: 'ជ្រើសរើសសិស្ស' },
+  newPromotion: { en: 'New Promotion', km: 'ដំឡើងថ្នាក់ថ្មី' },
+  viewAllPromotionRecords: { en: 'View all past student promotion records.', km: 'មើលប្រវត្តិនៃការដំឡើងថ្នាក់សិស្សទាំងអស់។' },
+  promotions: { en: 'Promotions', km: 'ដំឡើងថ្នាក់' },
+
 };
 
 interface LanguageContextType {
